@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-package:
+    name: Build, test, and package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Make Maven Wrapper executable
+        run: chmod +x mvnw
+
+      - name: Build and run tests
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
+        env:
+          API_SECURITY_TOKEN_SECRET: ci-test-secret-0123456789abcdef0123456789abcdef
+
+      - name: Prepare traceable artifact
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp target/biblioteca-*.jar dist/
+          cat > dist/BUILD_INFO.txt <<EOF
+          Project: biblioteca
+          Commit: ${GITHUB_SHA}
+          Branch: ${GITHUB_REF_NAME}
+          Run ID: ${GITHUB_RUN_ID}
+          Run attempt: ${GITHUB_RUN_ATTEMPT}
+          Build UTC: $(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          Java: 21 (Temurin)
+          Build: Maven Wrapper, clean verify
+          EOF
+          sha256sum dist/*.jar > dist/SHA256SUMS.txt
+
+      - name: Upload application artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: biblioteca-${{ github.run_id }}-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
