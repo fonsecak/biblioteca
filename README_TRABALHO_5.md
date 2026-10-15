@@ -33,28 +33,6 @@ Configurar um pipeline de integração contínua reproduzível para o projeto Bi
 
 Falhas em compilação ou testes interrompem a execução antes da criação do artefato. O job tem permissão de leitura do conteúdo do repositório.
 
-## Escopo em relação ao enunciado
-
-### Obrigatório
-
-- **Checkout:** executado por `actions/checkout`.
-- **Build:** executado com Maven Wrapper no comando `clean verify`.
-- **Testes existentes:** o Maven executa a suíte do projeto durante `verify`.
-- **Resultado visível:** status, etapas e logs ficam na execução do GitHub Actions.
-- **Artefato identificado:** JAR publicado com nome baseado no ID da execução e commit; inclui metadados e checksum.
-
-### Recomendado, quando aplicável
-
-- **Cache de dependências:** configurado por `setup-java` com `cache: maven`.
-- **Análise estática:** não incluída nesta entrega.
-- **Construção de imagem:** não incluída; o artefato entregue é o JAR executável.
-- **Detecção de segredos:** não há etapa automatizada de varredura; o segredo JWT é fornecido por variável de ambiente e não fica no código.
-
-### Fora do escopo obrigatório
-
-- Deploy automático em produção.
-- Estratégias blue/green ou canary.
-
 ## Artefato e rastreabilidade
 
 O artefato publicado contém:
@@ -93,3 +71,12 @@ O segredo JWT é lido da variável `API_SECURITY_TOKEN_SECRET`; não deve ser co
 ## Investigar uma falha
 
 Na aba **Actions**, abra a execução, expanda o primeiro passo vermelho e examine o log do Maven. O Maven indica testes, erros de compilação e mensagens relevantes. Corrija o problema, rode `clean verify` localmente e envie um novo commit. Em falha de build ou testes, o artefato não é gerado.
+
+## Checklist dos entregáveis
+
+- Repositório da equipe: publicado no GitHub.
+- Arquivo de definição do pipeline: `.github/workflows/ci.yml`.
+- Instruções: este documento.
+- Gatilho, etapas, dependências e artefato: descritos acima.
+- Evidências de sucesso e falha: links das execuções incluídos acima.
+- Reprodutibilidade, investigação de falhas e proteção de segredos: descritas acima.
