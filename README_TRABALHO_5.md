@@ -71,12 +71,3 @@ O segredo JWT é lido da variável `API_SECURITY_TOKEN_SECRET`; não deve ser co
 ## Investigar uma falha
 
 Na aba **Actions**, abra a execução, expanda o primeiro passo vermelho e examine o log do Maven. O Maven indica testes, erros de compilação e mensagens relevantes. Corrija o problema, rode `clean verify` localmente e envie um novo commit. Em falha de build ou testes, o artefato não é gerado.
-
-## Checklist dos entregáveis
-
-- Repositório da equipe: publicado no GitHub.
-- Arquivo de definição do pipeline: `.github/workflows/ci.yml`.
-- Instruções: este documento.
-- Gatilho, etapas, dependências e artefato: descritos acima.
-- Evidências de sucesso e falha: links das execuções incluídos acima.
-- Reprodutibilidade, investigação de falhas e proteção de segredos: descritas acima.
