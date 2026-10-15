@@ -240,10 +240,16 @@ As etapas usam checkout do commit, Java 21 (Temurin) com cache das dependências
 Para reproduzir localmente com Java 21:
 
 ```bash
+export API_SECURITY_TOKEN_SECRET="<segredo-local-de-pelo-menos-32-bytes>"
 ./mvnw --batch-mode clean verify
 ```
 
-No Windows, use `mvnw.cmd --batch-mode clean verify`; configure `API_SECURITY_TOKEN_SECRET` antes se executar a aplicação ou os testes de contexto. Para gerar evidência de sucesso, abra uma execução verde em **Actions** e registre os passos e o artefato publicado. Para evidência de falha, em uma branch de demonstração altere temporariamente o teste de contexto para falhar, envie o commit e registre o passo `Build and run tests` vermelho; confirme que o artefato não foi publicado e reverta a alteração.
+No Windows, configure primeiro `$env:API_SECURITY_TOKEN_SECRET = "<segredo-local-de-pelo-menos-32-bytes>"` e rode `mvnw.cmd --batch-mode clean verify`.
+
+### Evidências registradas
+
+- **Sucesso:** [execução CI #38659291985](https://github.com/fonsecak/biblioteca/actions/runs/38659291985), commit `6c9167ad`. O build/teste passou e publicou o JAR com `BUILD_INFO.txt` e `SHA256SUMS.txt`.
+- **Falha detectada:** [execução CI #38659432166](https://github.com/fonsecak/biblioteca/actions/runs/38659432166), branch temporária `evidence/ci-failure`. O teste de contexto foi alterado intencionalmente para falhar; `Build and run tests` falhou e a geração/upload do artefato foi pulada. A branch de demonstração foi removida após a execução.
 
 O workflow não precisa de credenciais e não usa segredos. A chave JWT de teste é fornecida como variável de ambiente apenas durante os testes; credenciais para futuras integrações devem ficar em GitHub Actions Secrets, nunca no código ou nos logs. O job recebe permissões mínimas para ler o repositório e enviar o artefato.
 - Acessos:
