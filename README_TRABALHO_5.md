@@ -1,5 +1,19 @@
 # Trabalho 5 — Pipeline CI com GitHub Actions
 
+**Disciplina:** Cloud Computing e DevOps Avançado  
+**Curso:** Sistemas para Internet | 6º Período  
+**Professor:** Diogo Ranghetti  
+
+---
+
+## Integrantes do Grupo
+
+- **[Gabriel Fonseca Proença]** - [RA: 14608]
+- **[Guilherme Carrera]** - [RA: 14651]
+- **[Kaiky Massaki Ishibashi]** - [RA: 14535]
+- **[Marcos Kaiky Rodrigues Garcia]** - [RA: 14610]
+
+
 ## Objetivo
 
 Configurar um pipeline de integração contínua reproduzível para o projeto Biblioteca, usando GitHub Actions, Maven Wrapper e Java 21.
