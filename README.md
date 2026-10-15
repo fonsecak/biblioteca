@@ -95,7 +95,6 @@ Conforme o `pom.xml`:
 - **Console H2**: `spring.h2.console.path=/h2-console`
 - **Segredo JWT**: `api.security.token.secret=...`
   - Este valor é usado para assinar e validar tokens (HMAC SHA-256).
-  - É fornecido pela variável de ambiente `API_SECURITY_TOKEN_SECRET`; não grave o segredo no repositório.
 
 ## Autenticação e autorização (detalhamento)
 
@@ -229,29 +228,6 @@ Em `BibliotecaApplication`, existe um `CommandLineRunner` que cria dois usuário
 
 - Executar a aplicação:
   - `./mvnw spring-boot:run`
-  - Configure antes `API_SECURITY_TOKEN_SECRET` com um valor aleatório de pelo menos 32 bytes. No PowerShell: `$env:API_SECURITY_TOKEN_SECRET = "<segredo-local>"`.
-
-## Integração contínua (GitHub Actions)
-
-O workflow `.github/workflows/ci.yml` executa automaticamente em `push` e pull requests para `master` ou `main`, e também pode ser iniciado manualmente pela aba **Actions** (`workflow_dispatch`).
-
-As etapas usam checkout do commit, Java 21 (Temurin) com cache das dependências Maven, Maven Wrapper, `clean verify` e publicação do JAR executável. O comando `verify` compila e roda os testes existentes; uma falha encerra o job e impede a publicação. O artefato da execução contém o JAR, `BUILD_INFO.txt` (commit, branch e execução) e `SHA256SUMS.txt`; logs e artefatos ficam associados ao commit e à execução na aba **Actions**.
-
-Para reproduzir localmente com Java 21:
-
-```bash
-export API_SECURITY_TOKEN_SECRET="<segredo-local-de-pelo-menos-32-bytes>"
-./mvnw --batch-mode clean verify
-```
-
-No Windows, configure primeiro `$env:API_SECURITY_TOKEN_SECRET = "<segredo-local-de-pelo-menos-32-bytes>"` e rode `mvnw.cmd --batch-mode clean verify`.
-
-### Evidências registradas
-
-- **Sucesso:** [execução CI #38659291985](https://github.com/fonsecak/biblioteca/actions/runs/38659291985), commit `6c9167ad`. O build/teste passou e publicou o JAR com `BUILD_INFO.txt` e `SHA256SUMS.txt`.
-- **Falha detectada:** [execução CI #38659432166](https://github.com/fonsecak/biblioteca/actions/runs/38659432166), branch temporária `evidence/ci-failure`. O teste de contexto foi alterado intencionalmente para falhar; `Build and run tests` falhou e a geração/upload do artefato foi pulada. A branch de demonstração foi removida após a execução.
-
-O workflow não precisa de credenciais e não usa segredos. A chave JWT de teste é fornecida como variável de ambiente apenas durante os testes; credenciais para futuras integrações devem ficar em GitHub Actions Secrets, nunca no código ou nos logs. O job recebe permissões mínimas para ler o repositório e enviar o artefato.
 - Acessos:
   - **Site**: `http://localhost:8080/`
   - **Login**: `http://localhost:8080/login`
@@ -265,4 +241,3 @@ O workflow não precisa de credenciais e não usa segredos. A chave JWT de teste
     - `{ "username": "admin", "password": "admin" }`
 - Usar token nas demais rotas:
   - Header: `Authorization: Bearer <token>`
-
