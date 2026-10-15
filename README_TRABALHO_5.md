@@ -8,10 +8,10 @@
 
 ## Integrantes do Grupo
 
-- **[Gabriel Fonseca Proença]** - [RA: 14608]
-- **[Guilherme Carrera]** - [RA: 14651]
-- **[Kaiky Massaki Ishibashi]** - [RA: 14535]
-- **[Marcos Kaiky Rodrigues Garcia]** - [RA: 14610]
+- **Gabriel Fonseca Proença** - RA: 14608
+- **Guilherme Carrera** - RA: 14651
+- **Kaiky Massaki Ishibashi** - RA: 14535
+- **Marcos Kaiky Rodrigues Garcia** - RA: 14610
 
 
 ## Objetivo
@@ -23,6 +23,10 @@ Configurar um pipeline de integração contínua reproduzível para o projeto Bi
 - Repositório: https://github.com/fonsecak/biblioteca
 - Workflow: `.github/workflows/ci.yml`
 - Gatilhos: push e pull request para `master` e `main`, além de execução manual (`workflow_dispatch`).
+
+### Pré-requisitos (Execução Local)
+* **Java JDK:** Versão 21
+* **Git:** Para clonagem e controle de versão
 
 ## Etapas do pipeline
 
@@ -43,7 +47,21 @@ O artefato publicado contém:
 
 O artefato fica associado à execução do workflow e tem retenção configurada para 30 dias (sujeita ao limite definido no repositório).
 
-## Como reproduzir localmente
+## Instruções de Execução
+
+### Execução Automática (via CI)
+1. Realize uma alteração no código-fonte num ramo de desenvolvimento ou diretamente na branch configurada.
+2. Faça o commit das alterações:
+
+   ```
+   git add .
+   git commit -m "feat: descrição da alteração"
+   ```
+
+3. Envie as alterações para o repositório remoto (`git push origin main`) ou abra um **Pull Request** apontando para a branch `main`.
+4. Vá para o separador **[Actions / CI-CD]** do repositório para acompanhar a execução automática em tempo real.
+
+### Como reproduzir localmente
 
 Requisitos: Java 21 e acesso ao Maven Central para o Maven Wrapper baixar a distribuição e dependências.
 
